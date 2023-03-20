@@ -1,43 +1,138 @@
-import random
+from random import *
 
-paevad = ['E', 'T', 'K', 'N', 'R', 'L', 'P']
-tundide_arv = [random.randint(1, 10) for _ in range(7)]
-nadalalopul = [random.choice([True, False]) for _ in range(7)]
+def Soorteerimine(inimesed,palgad):
+    v=int(input("Palk 1-kahened,2-kasvad?"))
+    if v==1:
+        n=len(palgad) 
+        for j in range(0,n-1):
+            for k in range(j+1,n):
+                if palgad[j] < palgad[k]:
+                    abi = palgad[j]
+                    palgad[j] = palgad[k]
+                    palgad[k] = abi
+                    abi = inimesed[j]
+                    inimesed[j] = inimesed[k]
+                    inimesed[k] = abi
+    elif v == 2:
+            n = len(palgad)
+            for j in range(n - 1):
+                for k in range(j + 1, n):
+                    if palgad[j] > palgad[k]:
+                        abi = palgad[j]
+                        palgad[j] = palgad[k]
+                        palgad[k] = abi
+                        abi = inimesed[j]
+                        inimesed[j] = inimesed[k]
+                        inimesed[k] = abi  
+    print("Имена работников", inimesed)
+    print("Зарплаты работников:", palgad) 
+    
+def Kustutamine(palgad:list,inimesed:list):
+    nimi=input("sisesta nimi: ")
+    if nimi in inimesed:
+        n=inimesed.count(nimi)
+        for j in range(n):
+            ind=inimesed.index(nimi)
+            inimesed.pop(ind)
+            palgad.pop(ind)
+    return inimesed,palgad
 
-while True:
-    print("Vali tegevus:")
-    print("1. Kuva t��tatud tunnid p�evade kaupa")
-    print("2. Leia p�ev, mil t��tati k�ige rohkem ja k�ige v�hem tunde")
-    print("3. Leia kokku t��tatud tunnid n�dala jooksul")
-    print("4. Arvuta n�dalapalk")
-    print("5. Enda versioon")
-    print("0. L�peta programmi t��")
-    valik = input("Sisesta valik (0-5): ")
+#1-Добавить еще несколько человек и зарплат(кол-во говорит пользователь),
+def uued_palgad(inimesed,palgad):
+    nimi=input("Kirjuta nimi: ")
+    palk=int(input("Kirjuta palk: "))
+    palgad.append(palk)
+    inimesed.append(nimi)
+    return inimesed, palgad
 
-    if valik == "0":
-        break
-    elif valik == "1":
-        for i, paev in enumerate(paevad):
-            print(f"{paev}: {tundide_arv[i]}")
-    elif valik == "2":
-        maksimum = tundide_arv.index(max(tundide_arv))
-        miinimum = tundide_arv.index(min(tundide_arv))
-        print(f"K�ige rohkem t��tati tunde ({tundide_arv[maksimum]}) p�eval {paevad[maksimum]}")
-        print(f"K�ige v�hem t��tati tunde ({tundide_arv[miinimum]}) p�eval {paevad[miinimum]}")
-    elif valik == "3":
-        kokku = sum(tundide_arv)
-        print(f"Kokku t��tatud tunnid: {kokku}")
-    elif valik == "4":
-        tunnitasu = float(input("Sisesta tunnitasu: "))
-        kokku = 0
-        for i, paev in enumerate(paevad):
-            if nadalalopul[i]:
-                kokku += tundide_arv[i] * 1.5 * tunnitasu
-            else:
-                kokku += tundide_arv[i] * tunnitasu
-        print(f"N�dalapalk: {kokku}")
-    elif valik == "5":
-        # Siia saad lisada oma versiooni
-        print("Enda versioon pole veel rakendatud")
+#praktiline töö 10
+def Keskmine(palgad,inimesed):
+    keskminee=sum(palgad)/len(palgad)
+    max_index=palgad.index(keskminee)
+    nimi=inimesed[max_index]
+    return keskminee, nimi
+
+"""
+def keskmine(palgad,inimesed):
+    keskminee=sum(palgad)/len(palgad)
+    ind=palgad.index(keskminee)
+    nimi=inimesed[ind]  
+    return keskminee
+"""
+
+#Registreerimine ja autoriseerimine
+def kasutajaandmed(ll:list,p:list):
+    """siin toimub registreerimine
+    """
+    print("Kas sa tahad oma andmet või random")
+    a=input("Mida te soovite: ")
+    if a=="oma":
+        login=input("Kirjutage teie nimi: ")       
+    print("Kas sa tahad oma andmet või random")
+    a=input("Mida te soovite: ")
+    if a=="oma":
+        login=input("Kirjutage teie nimi: ")      
+        psword=input("Kirjutage teie salasõna max 12 värtused: ")
+        n=len(psword)
+        while n<12:
+            psword=input("Teie salasõna on lühike. Palun kirjuta veel: ")
+            n=len(psword)
+    elif a=="random":
+        login=input("Kirjutage teie nimi: ")
+        str0=".,:;!_*-+()/#¤%&"
+        str1 = '0123456789'
+        str2 = 'qwertyuiopasdfghjklzxcvbnm'
+        str3 = str2.upper()
+        #print(str3) # 'QWERTYUIOPASDFGHJKLZXCVBNM'
+        str4 = str0+str1+str2+str3
+        #print(str4)
+        ls = list(str4)
+        #print(ls)
+        shuffle(ls)
+        #print(ls)
+        # Извлекаем из списка 12 произвольных значений
+        psword = ''.join([choice(ls) for x in range(12)])
+    ll.append(login)
+    p.append(psword)
+    return login,psword
+ 
+def aut(ll:list,p:list):
+    """siin on autoriseerimine 
+    """
+    print("Kirjutage teie login j salasõna")
+    logg=input("Login: ")
+    pas_=input("Salasõna: ")
+    if logg in ll and pas_ in p:
+        print("Tere tulemast!")
+    else: 
+        print("Ebaõiged andmed")
+    return logg, pas_
+
+def uss_login(ll:list,vanamini:list,uusnimi:list):
+    """Siin saab oma nimi kustutada.
+    """
+    if vanamini in ll:
+        index=ll.index(vanamini)
+        ll[index]=uusnimi
+        print("Sinu nimi on muudetud.")
     else:
-        print("Vigane valik")
+        print("Viga!")
+
+def uss_salasõna(ll,p,login,vanasalasõna,uussalasõna):
+    """Siin saab oma parooli kustutada.
+    """
+    if login in ll and vanasalasõna in p:
+        index=ll.index(login)
+        p[index]=uussalasõna       
+        print("salasõna on muudetud")
+    else:
+        print("Viga!")
+        
+def nimii(ll,p,nimiii):
+    """Siin saab vaadata oma vana parooli.
+    """
+    if nimiii in ll:
+        index=ll.index(nimiii)
+        print(f"Teie vana salasõna on:",p[index])
+    else: 
+        print("Viga!")
